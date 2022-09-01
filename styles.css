@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Cabin+Sketch&display=swap');
+
+* {
+    font-family: 'Cabin', 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#calculator{
+    background-color: #40485C;
+
+    margin: 0 auto;
+    width: 450px;
+    height: 700px;
+
+    border-radius: 25px;
+}
+
+.operator, .number, .clear, .equal, .decimal{
+    background-color: #40485C;
+    color: white;
+
+
+    margin: 2px 9px 5px 0;
+    width: 100px;
+    height: 100px;
+       
+
+    border-radius: 50%;
+    border: 1px solid #40485C;
+    
+    text-align: center;
+    font-size: 60px;
+    text-shadow: 4px 4px 4px rgba(0,0,0,25);
+}
+
+#resultScreen{
+    background-color: #2B3549;
+    color: white;
+
+    width: 100%;
+    height: 100px;
+    padding: 12px 20px;
+    margin-top: 0px;
+    margin-bottom: 25px;
+    border-radius: 25px 25px 0 0;
+    box-sizing: border-box;
+    border: none;
+
+    font-size: 60px;
+    text-align: right;
+}
+
+.number:hover,
+ .clear:hover,
+ .operator:hover,
+ .equal:hover,
+ .decimal:hover{
+     filter: drop-shadow(0 0 0.4rem rgb(2, 15, 25));
+    
+ }
+
+.operator, .clear, .equal{
+    background-color: #2B3549;
+    color: #EC1288;
+
+    font-size: 60px;
+}
+
+.clear, #equal-button{
+    width: 200px;
+    border-radius: 25px;
+}
+
+.clear{
+    margin-left: 15px;
+}
+
+.equal{
+    background-color: #EC1288;
+    color: white;
+}
+
