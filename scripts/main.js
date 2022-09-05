@@ -2,6 +2,8 @@ let currentNum = "";
 let previousNum = "";
 let operator = "";
 
+let arrayOperators = ["+", "-", "*", "/", "=", "x", "÷"];
+
 const currentDisplayNumber = document.querySelector(".currentNumber");
 
 var multiplybutton = document.getElementById('multiply-btn');
@@ -41,21 +43,32 @@ function handleNumber(number) {
     previousNum = "";
     currentDisplayNumber.textContent = currentNum;
   }
-  if (currentNum.length <= 11) {
+  if (currentNum.length <= 10) {
     currentNum += number;
     currentDisplayNumber.textContent = currentNum;
   }
 }
 
-operators.forEach((btn) => {
+/* operators.forEach((btn) => {
   btn.addEventListener("click", (e) => {
     handleOperator(e.target.textContent);
   });
-});
+}); codigo antiguo */
 
-plusminusbutton.addEventListener("click", () => {
-  currentNum = currentNum * (-1);
-  displayResults();
+operators.forEach(operatorInput => {
+  operatorInput.addEventListener('click', (event) => {
+    let input = event.target.textContent;
+    console.log(input);
+    if (input === plusminusbutton.textContent) {
+      inputPlusMinus(currentDisplayNumber.textContent);
+    } else {
+      arrayOperators.forEach(operator => {
+        if (input === operator) {
+          handleOperator(input);
+        }
+      })
+    }
+  });
 });
 
 
@@ -70,6 +83,7 @@ function handleOperator(op) {
     operator = op;
     currentDisplayNumber.textContent = "0";
   }
+  highlightOperator(operator);
 }
 
 function operatorCheck(text) {
@@ -79,8 +93,8 @@ function operatorCheck(text) {
 
 
 function calculate() {
-  previousNum = Number(previousNum);
-  currentNum = Number(currentNum);
+  previousNum = Number(swapToDot(previousNum));
+  currentNum = Number(swapToDot(currentNum));
 
   if (operator === "+") {
     previousNum += currentNum;
@@ -98,10 +112,15 @@ function calculate() {
   }
   else if (operator === plusminusbutton.textContent) {
     inputPlusMinus(resultScreen.textContent);
-  } 
+  }
   previousNum = roundNumber(previousNum);
-  previousNum = previousNum.toString();
+  previousNum = previousNum.toString().replace(".", ",");
   displayResults();
+  unhighlightOperator();
+}
+
+function swapToDot(num) {
+  return num.toString().replace(",", ".");
 }
 
 function roundNumber(num) {
@@ -121,19 +140,19 @@ function displayResults() {
 
 function inputPlusMinus(number) {
   let replaceComma;
-  if (currentNum[currentNum.length - 1] == ',') {
-      replaceComma = number.slice(0, currentNum.length-1)*-1;
-      replaceComma += ',';
-      currentNum = replaceComma;
-  } else {
-      if (resultScreen.textContent.includes(',')) {
-          replaceComma = number.replace(',', '.');
-          replaceComma = replaceComma * -1;
-          currentNum = replaceComma.toString().replace('.', ',');
-      } else {
-          currentNum = (number * -1);
-      }
+  if (currentDisplayNumber.textContent[currentDisplayNumber.textContent.length - 1] == ',') {
+    replaceComma = number.slice(0, currentDisplayNumber.textContent.length - 1) * -1;
+    replaceComma += ',';
+    previousNum = replaceComma;
+  } else if (currentDisplayNumber.textContent.includes(',')) {
+    replaceComma = number.replace(',', '.');
+    replaceComma = replaceComma * -1;
+    previousNum = replaceComma.toString().replace('.', ',');
+  } else if (currentDisplayNumber.textContent !== '0') {
+    (previousNum = (number * -1).toString())
   }
+
+  displayResults();
 
 }
 
@@ -142,15 +161,16 @@ function clearCalculator() {
   previousNum = "";
   operator = "";
   currentDisplayNumber.textContent = "0";
+  unhighlightOperator();
 }
 
 function addDecimal() {
-  if (!currentNum.includes(".")) {
-    currentNum += ".";
-    currentDisplayNumber.textContent = currentNum;
-  } else if (currentNum.includes(".")) {
-    return;
+  if (currentDisplayNumber.textContent === "0") {
+    currentNum = '0'.concat(",");
+  } else if (!currentDisplayNumber.textContent.includes(",")) {
+    currentNum = currentDisplayNumber.textContent.concat(",");
   }
+  currentDisplayNumber.textContent = currentNum;
 }
 
 function handleKeyPress(e) {
@@ -173,6 +193,9 @@ function handleKeyPress(e) {
   if (e.key === "/") {
     handleOperator(dividebutton.textContent);
   }
+  if (e.key === "Control") {
+    inputPlusMinus(currentDisplayNumber.textContent);
+  }
   if (e.key === ",") {
     addDecimal();
   }
@@ -182,6 +205,7 @@ function handleKeyPress(e) {
   if (e.key === "Delete" || e.key === "Escape") {
     clearCalculator();
   }
+
 }
 
 function handleDelete() {
@@ -198,6 +222,19 @@ function handleDelete() {
   }
 }
 
-function highlightOperator(){
+function highlightOperator(operatorBtn) {
+  unhighlightOperator();
+  for (let i = 0; i < operators.length; i++) {
+    if (operators[i].textContent === operatorBtn && operators[i].textContent !== '=') {
+      operators[i].classList.add('operatorHighlighted');
+    }
+  }
+
+}
+
+function unhighlightOperator() {
+  for (let i = 0; i < operators.length; i++) {
+    operators[i].classList.remove('operatorHighlighted');
+  }
 
 }

@@ -79,3 +79,7 @@
     color: white;
 }
 
+.operatorHighlighted{
+    background-color: white;
+    color: #EC1288;
+}
