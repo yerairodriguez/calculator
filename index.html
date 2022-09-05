@@ -10,32 +10,32 @@
 <body>
   <div id="calculator">
     <div id="resultScreen" class="output">
-      <div class="currentNumber">0</div>
+      <div class="currentNumber" data-testid="current-display">0</div>
     </div>
     <div id="buttons">
-      <button class="clear">C</button>
-      <button class="operator" id="plusminus-btn">&plusmn;</button>
-      <button class="operator" >+</button>
+      <button class="clear" data-testid="C">C</button>
+      <button class="operator" id="plusminus-btn" data-testid="&plusmn;">&plusmn;</button>
+      <button class="operator" data-testid="+">+</button>
 
-      <button class="number">7</button>
-      <button class="number">8</button>
-      <button class="number">9</button>
-      <button class="operator">-</button>
+      <button class="number" data-testid="7">7</button>
+      <button class="number" data-testid="8">8</button>
+      <button class="number" data-testid="9">9</button>
+      <button class="operator" data-testid="-">-</button>
 
-      <button class="number">4</button>
-      <button class="number">5</button>
-      <button class="number">6</button>
-      <button class="operator" id="multiply-btn">&times;</button>
+      <button class="number"data-testid="4">4</button>
+      <button class="number"data-testid="5">5</button>
+      <button class="number"data-testid="6">6</button>
+      <button class="operator" id="multiply-btn" data-testid="&times;">&times;</button>
 
-      <button class="number">1</button>
-      <button class="number">2</button>
-      <button class="number">3</button>
-      <button class="operator"id="divide-btn">&divide;</button>
+      <button class="number" data-testid="1">1</button>
+      <button class="number" data-testid="2">2</button>
+      <button class="number" data-testid="3">3</button>
+      <button class="operator"id="divide-btn" data-testid="&divide;">&divide;</button>
 
 
-      <button class="number">0</button>
-      <button class="decimal">,</button>
-      <button id="equal-button" class="equal">&equals;</button>
+      <button class="number" data-testid="0">0</button>
+      <button class="decimal" data-testid=",">,</button>
+      <button id="equal-button" class="equal" data-testid="=">&equals;</button>
     </div>
 </body>
 <script src="main.js"></script>
