@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Calculator</title>
+  <link rel="stylesheet" href="styles/styles.css" />
+</head>
+
+<body>
+  <div id="calculator">
+    <div id="resultScreen" class="output">
+      <div class="currentNumber" data-testid="current-display">0</div>
+    </div>
+    <div id="buttons">
+      <button class="clear" data-testid="C">C</button>
+      <button class="operator" id="plusminus-btn" data-testid="&plusmn;">&plusmn;</button>
+      <button class="operator" data-testid="+">+</button>
+
+      <button class="number" data-testid="7">7</button>
+      <button class="number" data-testid="8">8</button>
+      <button class="number" data-testid="9">9</button>
+      <button class="operator" data-testid="-">-</button>
+
+      <button class="number"data-testid="4">4</button>
+      <button class="number"data-testid="5">5</button>
+      <button class="number"data-testid="6">6</button>
+      <button class="operator" id="multiply-btn" data-testid="x">x</button>
+
+      <button class="number" data-testid="1">1</button>
+      <button class="number" data-testid="2">2</button>
+      <button class="number" data-testid="3">3</button>
+      <button class="operator"id="divide-btn" data-testid="&divide;">&divide;</button>
+
+
+      <button class="number" data-testid="0">0</button>
+      <button class="decimal" data-testid=",">,</button>
+      <button id="equal-button" class="equal" data-testid="=">&equals;</button>
+    </div>
+</body>
+<script src="scripts/main.js"></script>
+
+</html>
