@@ -83,3 +83,7 @@
     background-color: white;
     color: #EC1288;
 }
+
+#not-working-btn:hover{
+  cursor: not-allowed;
+}

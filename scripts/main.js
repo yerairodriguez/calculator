@@ -43,7 +43,7 @@ function handleNumber(number) {
     previousNum = "";
     currentDisplayNumber.textContent = currentNum;
   }
-  if (currentNum.length <= 10) {
+  if (checkLength(currentDisplayNumber.textContent)) {
     currentNum += number;
     currentDisplayNumber.textContent = currentNum;
   }
@@ -128,7 +128,7 @@ function roundNumber(num) {
 }
 
 function displayResults() {
-  if (previousNum.length <= 11) {
+  if (previousNum.length <= 12) {
     currentDisplayNumber.textContent = previousNum;
   } else {
     currentDisplayNumber.textContent = previousNum.slice(0, 11) + "...";
@@ -162,6 +162,7 @@ function clearCalculator() {
   operator = "";
   currentDisplayNumber.textContent = "0";
   unhighlightOperator();
+  reenableButtons();
 }
 
 function addDecimal() {
@@ -229,7 +230,7 @@ function highlightOperator(operatorBtn) {
       operators[i].classList.add('operatorHighlighted');
     }
   }
-
+  reenableButtons();
 }
 
 function unhighlightOperator() {
@@ -237,4 +238,37 @@ function unhighlightOperator() {
     operators[i].classList.remove('operatorHighlighted');
   }
 
+}
+
+function checkLength(number) {
+  if (number.length < 10) {
+    return true;
+  } else if (number.length < 11 && !number.includes(',') && number.includes('-')) {
+    return true;
+  } else if (number.length < 11 && number.includes(',') && !number.includes('-')) {
+    return true;
+  } else if (number.length < 12 && number.includes(',') && number.includes('-')) {
+    return true;
+  } else {
+    disableNumericalButtons();
+    return false;
+  }
+}
+
+function disableNumericalButtons() {
+  for (let i = 0; i < numberButtons.length; i++) {
+    {
+      numberButtons[i].setAttribute('disabled', true);
+      numberButtons[i].setAttribute('id', 'not-working-btn');
+    }
+  }
+}
+
+function reenableButtons(){
+  for (let i = 0; i < numberButtons.length; i++) {
+    {
+      numberButtons[i].disabled = false;
+      numberButtons[i].removeAttribute('id', 'not-working-btn');
+    }
+  }
 }
