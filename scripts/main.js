@@ -49,12 +49,6 @@ function handleNumber(number) {
   }
 }
 
-/* operators.forEach((btn) => {
-  btn.addEventListener("click", (e) => {
-    handleOperator(e.target.textContent);
-  });
-}); codigo antiguo */
-
 operators.forEach(operatorInput => {
   operatorInput.addEventListener('click', (event) => {
     let input = event.target.textContent;
@@ -70,7 +64,6 @@ operators.forEach(operatorInput => {
     }
   });
 });
-
 
 function handleOperator(op) {
   if (previousNum === "") {
@@ -128,7 +121,7 @@ function roundNumber(num) {
 }
 
 function displayResults() {
-  if (previousNum.length <= 12) {
+  if (previousNum.length <= 11) {
     currentDisplayNumber.textContent = previousNum;
   } else {
     currentDisplayNumber.textContent = previousNum.slice(0, 11) + "...";
