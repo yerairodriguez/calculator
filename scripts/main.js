@@ -21,6 +21,7 @@ equal.addEventListener("click", () => {
 });
 
 const decimal = document.querySelector(".decimal");
+
 decimal.addEventListener("click", () => {
   addDecimal();
 });
@@ -165,6 +166,7 @@ function addDecimal() {
     currentNum = currentDisplayNumber.textContent.concat(",");
   }
   currentDisplayNumber.textContent = currentNum;
+  disableCommaBtn();
 }
 
 function handleKeyPress(e) {
@@ -262,6 +264,14 @@ function reenableButtons(){
     {
       numberButtons[i].disabled = false;
       numberButtons[i].removeAttribute('id', 'not-working-btn');
+      decimal.disabled = false;
+      decimal.removeAttribute('id', 'not-working-btn');
     }
   }
 }
+
+function disableCommaBtn() {
+  decimal.disabled = true;
+  decimal.setAttribute('id', 'not-working-btn');
+}
+
