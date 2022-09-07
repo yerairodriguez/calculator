@@ -78,6 +78,7 @@ function handleOperator(op) {
     currentDisplayNumber.textContent = "0";
   }
   highlightOperator(operator);
+  disablePlusMinusBtn();
 }
 
 function operatorCheck(text) {
@@ -100,6 +101,7 @@ function calculate() {
     if (currentNum <= 0) {
       previousNum = "Error";
       displayResults();
+      disableAllButtons();
       return;
     }
     previousNum /= currentNum;
@@ -259,15 +261,19 @@ function disableNumericalButtons() {
   }
 }
 
-function reenableButtons(){
+function reenableButtons() {
   for (let i = 0; i < numberButtons.length; i++) {
     {
       numberButtons[i].disabled = false;
       numberButtons[i].removeAttribute('id', 'not-working-btn');
-      decimal.disabled = false;
-      decimal.removeAttribute('id', 'not-working-btn');
+    }
+    for (let i = 0; i < operators.length; i++) {
+      operators[i].disabled = false;
+      operators[i].removeAttribute('id', 'not-working-btn');
     }
   }
+  decimal.disabled = false;
+  decimal.removeAttribute('id', 'not-working-btn');
 }
 
 function disableCommaBtn() {
@@ -275,3 +281,24 @@ function disableCommaBtn() {
   decimal.setAttribute('id', 'not-working-btn');
 }
 
+function disableAllButtons() {
+  for (let i = 0; i < numberButtons.length; i++) {
+    {
+      numberButtons[i].setAttribute('disabled', true);
+      numberButtons[i].setAttribute('id', 'not-working-btn');
+    }
+  }
+  for (let i = 0; i < operators.length; i++) {
+    {
+      operators[i].setAttribute('disabled', true);
+      operators[i].setAttribute('id', 'not-working-btn');
+    }
+  }
+  decimal.disabled = true;
+  decimal.setAttribute('id', 'not-working-btn');
+}
+
+function disablePlusMinusBtn() {
+  plusminusbutton.disabled = true;
+  plusminusbutton.setAttribute('id', 'not-working-btn');
+}
