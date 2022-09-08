@@ -9,11 +9,13 @@ const currentDisplayNumber = document.querySelector(".currentNumber");
 var multiplybutton = document.getElementById('multiply-btn');
 var dividebutton = document.getElementById('divide-btn');
 var plusminusbutton = document.getElementById('plusminus-btn');
+var zero = document.getElementById('zero-btn');
 
 
 window.addEventListener("keydown", handleKeyPress);
 
 const equal = document.querySelector(".equal");
+
 equal.addEventListener("click", () => {
   if (currentNum != "" && previousNum != "") {
     calculate();
@@ -40,6 +42,7 @@ numberButtons.forEach((btn) => {
 });
 
 function handleNumber(number) {
+  removeInitialDisable();
   if (previousNum !== "" && currentNum !== "" && operator === "") {
     previousNum = "";
     currentDisplayNumber.textContent = currentNum;
@@ -256,8 +259,10 @@ function disableNumericalButtons() {
   for (let i = 0; i < numberButtons.length; i++) {
     {
       numberButtons[i].setAttribute('disabled', true);
-      numberButtons[i].setAttribute('id', 'not-working-btn');
+      numberButtons[i].classList.add('not-working-btn');
     }
+    decimal.disabled = true;
+    decimal.classList.add('not-working-btn')
   }
 }
 
@@ -265,40 +270,62 @@ function reenableButtons() {
   for (let i = 0; i < numberButtons.length; i++) {
     {
       numberButtons[i].disabled = false;
-      numberButtons[i].removeAttribute('id', 'not-working-btn');
+      numberButtons[i].classList.remove('not-working-btn');
     }
     for (let i = 0; i < operators.length; i++) {
       operators[i].disabled = false;
-      operators[i].removeAttribute('id', 'not-working-btn');
+      operators[i].classList.remove('not-working-btn');
     }
   }
   decimal.disabled = false;
-  decimal.removeAttribute('id', 'not-working-btn');
+  decimal.classList.remove('not-working-btn');
+
+  initialDisable();
 }
 
 function disableCommaBtn() {
   decimal.disabled = true;
-  decimal.setAttribute('id', 'not-working-btn');
+  decimal.classList.add('not-working-btn');
 }
 
 function disableAllButtons() {
   for (let i = 0; i < numberButtons.length; i++) {
     {
       numberButtons[i].setAttribute('disabled', true);
-      numberButtons[i].setAttribute('id', 'not-working-btn');
+      numberButtons[i].classList.add('not-working-btn');
     }
   }
   for (let i = 0; i < operators.length; i++) {
     {
       operators[i].setAttribute('disabled', true);
-      operators[i].setAttribute('id', 'not-working-btn');
+      operators[i].classList.add('not-working-btn');
     }
   }
   decimal.disabled = true;
-  decimal.setAttribute('id', 'not-working-btn');
+  decimal.classList.add('not-working-btn');
 }
 
 function disablePlusMinusBtn() {
   plusminusbutton.disabled = true;
-  plusminusbutton.setAttribute('id', 'not-working-btn');
+  plusminusbutton.classList.add('not-working-btn');
+}
+
+function disableZero() {
+  zero.disabled = true;
+  zero.classList.add('not-working-btn');
+}
+
+function initialDisable() {
+  if (currentDisplayNumber.textContent === '0') {
+    disablePlusMinusBtn();
+    disableZero();
+  }
+}
+initialDisable();
+
+function removeInitialDisable() {
+  plusminusbutton.disabled = false;
+  plusminusbutton.classList.remove('not-working-btn');
+  zero.disabled = false;
+  zero.classList.remove('not-working-btn');
 }

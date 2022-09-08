@@ -84,10 +84,10 @@
     color: #EC1288;
 }
 
-#not-working-btn{
+.not-working-btn{
     background-color: #393f4e;
 }
 
-#not-working-btn:hover{
+.not-working-btn:hover{
   cursor: not-allowed;
 }
