@@ -34,8 +34,8 @@ Given('a user opens the app', async () => {
 });
 
 Then('the display should show the following value: {string}', async (string) => {
-	//const display = await page.locator('data-testid=display').innerText();
-	const display = await page.locator('data-testid=display').inputValue();
+	const display = await page.locator('data-testid=display').innerText();
+	//const display = await page.locator('data-testid=display').inputValue();
 	expect(display).toBe(string);
 });
 

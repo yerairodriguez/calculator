@@ -17,7 +17,9 @@ window.addEventListener("keydown", handleKeyPress);
 const equal = document.querySelector(".equal");
 
 equal.addEventListener("click", () => {
-  if (currentNum != "" && previousNum != "") {
+  if (previousNum !== "" && currentNum === "") {
+    currentDisplayNumber.textContent = "ERROR";
+  } else {
     calculate();
   }
 });
@@ -50,7 +52,7 @@ function handleNumber(number) {
   if (checkLength(currentDisplayNumber.textContent)) {
     currentNum += number;
     currentDisplayNumber.textContent = currentNum;
-  }   
+  }
   checkLength(currentDisplayNumber.textContent);
 }
 
@@ -102,8 +104,8 @@ function calculate() {
   } else if (operator === multiplybutton.textContent) {
     previousNum *= currentNum;
   } else if (operator === dividebutton.textContent) {
-    if (currentNum <= 0) {
-      previousNum = "Error";
+    if (currentNum === 0) {
+      previousNum = "ERROR";
       displayResults();
       disableAllButtons();
       return;
@@ -111,9 +113,10 @@ function calculate() {
     previousNum /= currentNum;
   }
   else if (operator === plusminusbutton.textContent) {
-    inputPlusMinus(resultScreen.textContent);
+    inputPlusMinus(currentDisplayNumber.textContent);
   }
   previousNum = roundNumber(previousNum);
+  console.log(previousNum);
   previousNum = previousNum.toString().replace(".", ",");
   displayResults();
   unhighlightOperator();
@@ -124,14 +127,12 @@ function swapToDot(num) {
 }
 
 function roundNumber(num) {
-  return Math.round(num * 100000) / 100000;
+  return Math.round((num + Number.EPSILON) * 100000000) / 100000000;
 }
 
 function displayResults() {
-  if (previousNum.length <= 10) {
+  if (previousNum.length <= 12) {
     currentDisplayNumber.textContent = previousNum;
-  } else {
-    currentDisplayNumber.textContent = previousNum.slice(0, 11) + "...";
   }
 
   operator = "";
@@ -170,9 +171,9 @@ function addDecimal() {
     currentNum = '0'.concat(",");
   } else if (!currentDisplayNumber.textContent.includes(",")) {
     currentNum = currentDisplayNumber.textContent.concat(",");
+    disableCommaBtn();
   }
   currentDisplayNumber.textContent = currentNum;
-  disableCommaBtn();
 }
 
 function handleKeyPress(press) {
@@ -232,13 +233,13 @@ function highlightOperator(operatorBtn) {
     }
   }
   reenableButtons();
+
 }
 
 function unhighlightOperator() {
   for (let i = 0; i < operators.length; i++) {
     operators[i].classList.remove('operatorHighlighted');
   }
-
 }
 
 function checkLength(number) {
@@ -278,8 +279,10 @@ function reenableButtons() {
       operators[i].classList.remove('not-working-btn');
     }
   }
-  decimal.disabled = false;
-  decimal.classList.remove('not-working-btn');
+  enableCommaBtn();
+
+  equal.disabled = false;
+  equal.classList.remove('not-working-btn');
 
   initialDisable();
 }
@@ -287,6 +290,11 @@ function reenableButtons() {
 function disableCommaBtn() {
   decimal.disabled = true;
   decimal.classList.add('not-working-btn');
+}
+
+function enableCommaBtn() {
+  decimal.disabled = false;
+  decimal.classList.remove('not-working-btn');
 }
 
 function disableAllButtons() {

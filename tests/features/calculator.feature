@@ -3,9 +3,11 @@ Feature: Calculator
 Background:
 Given a user opens the app
 
-Scenario: Default display screen
+@done
+Scenario: Default display screen 
 Then the display should show the following value: "0"
 
+@done
 Scenario Outline: Pressing non-operators screen buttons
 Given the display shows the following value: "<displayNumber>"
 When the user presses the "<button>" button
@@ -28,6 +30,7 @@ Examples:
 |             1 |     +- |            -1 |
 |            -1 |     +- |             1 |
 
+@done
 Scenario Outline: Pressing non-operators keys
 Given the display shows the following value: "<displayNumber>"
 When the user presses the "<key>" key
@@ -50,6 +53,7 @@ Examples:
 |             1 |    Control |            -1 |
 |            -1 |    Control |             1 |
 
+@done
 Scenario Outline: Writing numbers 
 Given the display shows the following value: "<displayNumber>"
 When the user presses the "<button>" button
@@ -122,6 +126,7 @@ Examples:
 |           -10 |      / |          2 |            -5 |
 |           -10 |      / |         -2 |             5 |
 
+@done
 Scenario Outline: Before clicking the equal button
 Given the display shows the following value: "<displayNumber>"
 And the user presses the "<button>" button
@@ -148,17 +153,17 @@ Examples:
 |            -1 |      - | 9999999999 |
 |    9999999999 |      * |          2 |
 |    9999999999 |      / |        0,1 |
-
+@done
 Scenario: Clicking the C button
 Given the display shows the following value: "123"
 When the user presses the "C" button
 Then the display should show the following value: "0"
-
+@done
 Scenario: Pressing the escape key
 Given the display shows the following value: "123"
 When the user presses the "Escape" key
 Then the display should show the following value: "0"
-
+@done
 Scenario Outline: Clicking two different operation buttons
 Given the display shows the following value: "<displayNumber>"
 And the user presses the "<button>" button
@@ -241,7 +246,7 @@ Given the user presses the "-" button
 And the user writes the number: "23"
 When the user presses the "=" button
 Then the display should show the following value: "-23"
-
+@done
 Scenario Outline: Showing the first number after pressing operation
 Given the display shows the following value: "<displayNumber>"
 When the user presses the "<button>" button
@@ -291,7 +296,7 @@ Examples:
 |   -  |
 |   *  |
 |   /  |
-
+@done
 Scenario Outline: Reenabling buttons with no error
 Given the display shows the following value: "1234567890"
 When the user presses the "<button>" button
@@ -338,7 +343,7 @@ And the "/" button should be enabled
 
 Examples:
 |   =  |
-
+@done
 Scenario Outline: Disabling buttons
 Given the display shows the following value: "<displayNumber>"
 Then the "0" button should be disabled
@@ -359,11 +364,11 @@ Examples:
 |   -1234567890 |
 |   123456789,5 |
 |  -123456789,5 |
-
+@done
 Scenario: Disabling the second comma
 Given the display shows the following value: "3,141592"
 Then the "," button should be disabled
-
+@done
 Scenario: Disabling because of error
 Given the display shows the following value: "1"
 And the user presses the "/" button
