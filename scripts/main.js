@@ -36,8 +36,8 @@ const numberButtons = document.querySelectorAll(".number");
 const operators = document.querySelectorAll(".operator");
 
 numberButtons.forEach((btn) => {
-  btn.addEventListener("click", (e) => {
-    handleNumber(e.target.textContent);
+  btn.addEventListener("click", (press) => {
+    handleNumber(press.target.textContent);
   });
 });
 
@@ -50,7 +50,8 @@ function handleNumber(number) {
   if (checkLength(currentDisplayNumber.textContent)) {
     currentNum += number;
     currentDisplayNumber.textContent = currentNum;
-  }
+  }   
+  checkLength(currentDisplayNumber.textContent);
 }
 
 operators.forEach(operatorInput => {
@@ -127,7 +128,7 @@ function roundNumber(num) {
 }
 
 function displayResults() {
-  if (previousNum.length <= 11) {
+  if (previousNum.length <= 10) {
     currentDisplayNumber.textContent = previousNum;
   } else {
     currentDisplayNumber.textContent = previousNum.slice(0, 11) + "...";
@@ -174,36 +175,36 @@ function addDecimal() {
   disableCommaBtn();
 }
 
-function handleKeyPress(e) {
-  e.preventDefault();
-  if (e.key >= 0 && e.key <= 9) {
-    handleNumber(e.key);
+function handleKeyPress(press) {
+  press.preventDefault();
+  if (press.key >= 0 && press.key <= 9) {
+    handleNumber(press.key);
   }
   if (
-    e.key === "Enter" ||
-    (e.key === "=" && currentNum != "" && previousNum != "")
+    press.key === "Enter" ||
+    (press.key === "=" && currentNum != "" && previousNum != "")
   ) {
     calculate();
   }
-  if (e.key === "+" || e.key === "-") {
-    handleOperator(e.key);
+  if (press.key === "+" || press.key === "-") {
+    handleOperator(press.key);
   }
-  if (e.key === "*") {
+  if (press.key === "*") {
     handleOperator(multiplybutton.textContent);
   }
-  if (e.key === "/") {
+  if (press.key === "/") {
     handleOperator(dividebutton.textContent);
   }
-  if (e.key === "Control") {
+  if (press.key === "Control") {
     inputPlusMinus(currentDisplayNumber.textContent);
   }
-  if (e.key === ",") {
+  if (press.key === ",") {
     addDecimal();
   }
-  if (e.key === "Backspace") {
+  if (press.key === "Backspace") {
     handleDelete();
   }
-  if (e.key === "Delete" || e.key === "Escape") {
+  if (press.key === "Delete" || press.key === "Escape") {
     clearCalculator();
   }
 
@@ -303,6 +304,8 @@ function disableAllButtons() {
   }
   decimal.disabled = true;
   decimal.classList.add('not-working-btn');
+  equal.disabled = true;
+  equal.classList.add('not-working-btn');
 }
 
 function disablePlusMinusBtn() {

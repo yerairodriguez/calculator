@@ -1,6 +1,6 @@
 const { Given, When, Then } = require('@cucumber/cucumber');
 const { expect } = require('@playwright/test');
-const url = '127.0.0.1:5500/calculator/index.html';
+const url = 'http://127.0.0.1:5500/';
 
 async function buttonClick(buttonId) {
 	await page.click(`[data-testid="${buttonId}"]`, { force: true });
@@ -34,8 +34,8 @@ Given('a user opens the app', async () => {
 });
 
 Then('the display should show the following value: {string}', async (string) => {
-	const display = await page.locator('data-testid=display').innerText();
-	// const display = await page.locator('data-testid=display').inputValue();
+	//const display = await page.locator('data-testid=display').innerText();
+	const display = await page.locator('data-testid=display').inputValue();
 	expect(display).toBe(string);
 });
 
