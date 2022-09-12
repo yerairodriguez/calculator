@@ -112,9 +112,6 @@ function calculate() {
     }
     previousNum /= currentNum;
   }
-  else if (operator === plusminusbutton.textContent) {
-    inputPlusMinus(currentDisplayNumber.textContent);
-  }
   previousNum = roundNumber(previousNum);
   console.log(previousNum);
   previousNum = previousNum.toString().replace(".", ",");
@@ -177,36 +174,37 @@ function addDecimal() {
 }
 
 function handleKeyPress(press) {
-  press.preventDefault();
-  if (press.key >= 0 && press.key <= 9) {
-    handleNumber(press.key);
-  }
-  if (
-    press.key === "Enter" ||
-    (press.key === "=" && currentNum != "" && previousNum != "")
-  ) {
-    calculate();
-  }
-  if (press.key === "+" || press.key === "-") {
-    handleOperator(press.key);
-  }
-  if (press.key === "*") {
-    handleOperator(multiplybutton.textContent);
-  }
-  if (press.key === "/") {
-    handleOperator(dividebutton.textContent);
-  }
-  if (press.key === "Control") {
-    inputPlusMinus(currentDisplayNumber.textContent);
-  }
-  if (press.key === ",") {
-    addDecimal();
-  }
-  if (press.key === "Backspace") {
-    handleDelete();
-  }
-  if (press.key === "Delete" || press.key === "Escape") {
-    clearCalculator();
+  if(currentDisplayNumber.textContent != 'ERROR'){
+    if (press.key >= 0 && press.key <= 9) {
+      handleNumber(press.key);
+    }
+    if (
+      press.key === "Enter" ||
+      (press.key === "=" && currentNum != "" && previousNum != "")
+    ) {
+      calculate();
+    }
+    if (press.key === "+" || press.key === "-") {
+      handleOperator(press.key);
+    }
+    if (press.key === "*") {
+      handleOperator(multiplybutton.textContent);
+    }
+    if (press.key === "/") {
+      handleOperator(dividebutton.textContent);
+    }
+    if (press.key === "Control") {
+      inputPlusMinus(currentDisplayNumber.textContent);
+    }
+    if (press.key === ",") {
+      addDecimal();
+    }
+    if (press.key === "Backspace") {
+      handleDelete();
+    }
+    if (press.key === "Delete" || press.key === "Escape") {
+      clearCalculator();
+    }
   }
 
 }
