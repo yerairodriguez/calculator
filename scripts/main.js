@@ -1,200 +1,120 @@
-let currentNum = "";
-let previousNum = "";
-let operator = "";
-
-let arrayOperators = ["+", "-", "*", "/", "=", "x", "÷"];
-
-const currentDisplayNumber = document.querySelector(".currentNumber");
-
-var multiplybutton = document.getElementById('multiply-btn');
-var dividebutton = document.getElementById('divide-btn');
-var plusminusbutton = document.getElementById('plusminus-btn');
-var zero = document.getElementById('zero-btn');
-
-
-window.addEventListener("keydown", handleKeyPress);
-
+// consts
+// lets
+// code without functions (enter code)
+// functions
+/**
+ * Consts and lets well defined and ordered
+ * All events definied in functions
+ * Functions rename done
+ * const currentNumberDisplay to -> display
+ * let currentNum & previousNum to -> let currentDisplay & previousDisplay
+ */
+const MAX_DIGITS_IN_DISPLAY = 10;
+const display = document.querySelector(".currentNumber");
 const equal = document.querySelector(".equal");
-
-equal.addEventListener("click", () => {
-  if (previousNum !== "" && currentNum === "") {
-    currentDisplayNumber.textContent = "ERROR";
-  } else {
-    calculate();
-  }
-});
-
 const decimal = document.querySelector(".decimal");
-
-decimal.addEventListener("click", () => {
-  addDecimal();
-});
-
 const clear = document.querySelector(".clear");
-clear.addEventListener("click", clearCalculator);
-
 const numberButtons = document.querySelectorAll(".number");
-
 const operators = document.querySelectorAll(".operator");
 
-numberButtons.forEach((btn) => {
-  btn.addEventListener("click", (press) => {
-    handleNumber(press.target.textContent);
-  });
-});
+let currentDisplay = "";
+let previousDisplay = "";
+let operator = "";
+let arrayOperators = ["+", "-", "*", "/", "=", "x", "÷"];
+let plusminusbutton = document.getElementById('plusminus-btn');
+let zero = document.getElementById('zero-btn');
 
-function handleNumber(number) {
-  removeInitialDisable();
-  if (previousNum !== "" && currentNum !== "" && operator === "") {
-    previousNum = "";
-    currentDisplayNumber.textContent = currentNum;
-  }
-  if (checkLength(currentDisplayNumber.textContent)) {
-    currentNum += number;
-    currentDisplayNumber.textContent = currentNum;
-  }
-  checkLength(currentDisplayNumber.textContent);
+
+setMouseEvents();
+setKeyboardEvents();
+disablePlusMinusAndZero();
+//calculatorReset(); ?
+
+
+function setMouseEvents() {
+  setClearEvent();
+  setNumberEvents()
+  setOperatorsEvent()
+  setEqualEvent()
+  setCommaEvent()
+
 }
 
-operators.forEach(operatorInput => {
-  operatorInput.addEventListener('click', (event) => {
-    let input = event.target.textContent;
-    console.log(input);
-    if (input === plusminusbutton.textContent) {
-      inputPlusMinus(currentDisplayNumber.textContent);
-    } else {
-      arrayOperators.forEach(operator => {
-        if (input === operator) {
-          handleOperator(input);
-        }
-      })
+function setNumberEvents() {
+  for (let i = 0; i < numberButtons.length; i++) {
+    numberButtons[i].addEventListener("click", function () {
+      handleNumber(numberButtons[i].textContent);
+    });
+  }
+}
+
+function setClearEvent() {
+  clear.addEventListener("click", clearCalculator)
+}
+
+function setEqualEvent() {
+  equal.addEventListener("click", () => {
+    if (previousDisplay !== "" && currentDisplay === "") {
+      display.textContent = "ERROR";
+    } else
+      calculate();
+    if (currentDisplay != "" && previousDisplay != "") {
+      calculate();
     }
   });
-});
+}
 
-function handleOperator(op) {
-  if (previousNum === "") {
-    previousNum = currentNum;
-    operatorCheck(op);
-  } else if (currentNum === "") {
-    operatorCheck(op);
-  } else {
-    calculate();
-    operator = op;
-    currentDisplayNumber.textContent = "0";
+function setCommaEvent() {
+  decimal.addEventListener("click", addDecimal)
+}
+
+function setOperatorsEvent() {
+  for (let i = 0; i < operators.length; i++) {
+    operators[i].addEventListener('click', (event) => {
+      let input = event.target.textContent;
+      console.log(input);
+      if (input === plusminusbutton.textContent) {
+        inputPlusMinus(display.textContent);
+      }
+      else {
+        arrayOperators.forEach(operator => {
+          if (input === operator) {
+            handleOperator(input);
+          }
+        })
+      }
+    });
   }
-  highlightOperator(operator);
-  disablePlusMinusBtn();
-}
-
-function operatorCheck(text) {
-  operator = text;
-  currentNum = "";
 }
 
 
-function calculate() {
-  previousNum = Number(swapToDot(previousNum));
-  currentNum = Number(swapToDot(currentNum));
-
-  if (operator === "+") {
-    previousNum += currentNum;
-  } else if (operator === "-") {
-    previousNum -= currentNum;
-  } else if (operator === multiplybutton.textContent) {
-    previousNum *= currentNum;
-  } else if (operator === dividebutton.textContent) {
-    if (currentNum === 0) {
-      previousNum = "ERROR";
-      displayResults();
-      disableAllButtons();
-      return;
-    }
-    previousNum /= currentNum;
-  }
-  previousNum = roundNumber(previousNum);
-  console.log(previousNum);
-  previousNum = previousNum.toString().replace(".", ",");
-  displayResults();
-  unhighlightOperator();
-}
-
-function swapToDot(num) {
-  return num.toString().replace(",", ".");
-}
-
-function roundNumber(num) {
-  return Math.round((num + Number.EPSILON) * 100000000) / 100000000;
-}
-
-function displayResults() {
-  if (previousNum.length <= 12) {
-    currentDisplayNumber.textContent = previousNum;
-  }
-
-  operator = "";
-  currentNum = "";
-}
-
-function inputPlusMinus(number) {
-  let replaceComma;
-  if (currentDisplayNumber.textContent[currentDisplayNumber.textContent.length - 1] == ',') {
-    replaceComma = number.slice(0, currentDisplayNumber.textContent.length - 1) * -1;
-    replaceComma += ',';
-    previousNum = replaceComma;
-  } else if (currentDisplayNumber.textContent.includes(',')) {
-    replaceComma = number.replace(',', '.');
-    replaceComma = replaceComma * -1;
-    previousNum = replaceComma.toString().replace('.', ',');
-  } else if (currentDisplayNumber.textContent !== '0') {
-    (previousNum = (number * -1).toString())
-  }
-
-  displayResults();
-
-}
-
-function clearCalculator() {
-  currentNum = "";
-  previousNum = "";
-  operator = "";
-  currentDisplayNumber.textContent = "0";
-  unhighlightOperator();
-  reenableButtons();
-}
-
-function addDecimal() {
-  if (currentDisplayNumber.textContent === "0") {
-    currentNum = '0'.concat(",");
-  } else if (!currentDisplayNumber.textContent.includes(",")) {
-    currentNum = currentDisplayNumber.textContent.concat(",");
-    disableCommaBtn();
-  }
-  currentDisplayNumber.textContent = currentNum;
+function setKeyboardEvents() {
+  window.addEventListener("keydown", handleKeyPress);
 }
 
 function handleKeyPress(press) {
-  if(currentDisplayNumber.textContent != 'ERROR'){
+  press.preventDefault();
+  if (press.key === "Escape") {
+    clearCalculator();
+  }
+  if (display.textContent != 'ERROR') {
     if (press.key >= 0 && press.key <= 9) {
       handleNumber(press.key);
     }
-    if (
-      press.key === "Enter" ||
-      (press.key === "=" && currentNum != "" && previousNum != "")
-    ) {
+    if (press.key === "Enter") {
       calculate();
     }
     if (press.key === "+" || press.key === "-") {
       handleOperator(press.key);
     }
     if (press.key === "*") {
-      handleOperator(multiplybutton.textContent);
+      handleOperator('x');
     }
     if (press.key === "/") {
-      handleOperator(dividebutton.textContent);
+      handleOperator('/');
     }
     if (press.key === "Control") {
-      inputPlusMinus(currentDisplayNumber.textContent);
+      inputPlusMinus(display.textContent);
     }
     if (press.key === ",") {
       addDecimal();
@@ -202,29 +122,141 @@ function handleKeyPress(press) {
     if (press.key === "Backspace") {
       handleDelete();
     }
-    if (press.key === "Delete" || press.key === "Escape") {
-      clearCalculator();
-    }
   }
 
+}
+
+function handleNumber(number) {
+  enablePlusMinusAndZero();
+  if (previousDisplay !== "" && currentDisplay !== "" && operator === "") {
+    previousDisplay = "";
+    display.textContent = currentDisplay;
+  }
+  if (checkLength(display.textContent)) {
+    currentDisplay += number;
+    display.textContent = currentDisplay;
+  }
+  checkLength(display.textContent); // isNewDigitAllowed
+}
+
+function handleOperator(op) {
+  if (previousDisplay === "") {
+    previousDisplay = currentDisplay;
+    checkOperator(op);
+  } else if (currentDisplay === "") {
+    checkOperator(op);
+  } else {
+    calculate();
+    operator = op;
+    // display.textContent = "0";  //setDisplay
+    //setButtonsEnabledStatus
+  }
+  highlightOperator(operator);
+  disablePlusMinusBtn();  //disableButtonsBy???
 }
 
 function handleDelete() {
-  if (currentNum !== "") {
-    currentNum = currentNum.slice(0, -1);
-    currentDisplayNumber.textContent = currentNum;
-    if (currentNum === "") {
-      currentDisplayNumber.textContent = "0";
+  if (currentDisplay !== "") {
+    currentDisplay = currentDisplay.slice(0, -1);
+    display.textContent = currentDisplay;
+    if (currentDisplay === "") {
+      display.textContent = "0";
     }
   }
-  if (currentNum === "" && previousNum !== "" && operator === "") {
-    previousNum = previousNum.slice(0, -1);
-    currentDisplayNumber.textContent = previousNum;
+  if (currentDisplay === "" && previousDisplay !== "" && operator === "") {
+    previousDisplay = previousDisplay.slice(0, -1);
+    display.textContent = previousDisplay;
   }
 }
 
+function checkOperator(text) {
+  operator = text;
+  currentDisplay = "";
+}
+
+function calculate() {
+  previousDisplay = Number(swapToDot(previousDisplay));
+  currentDisplay = Number(swapToDot(currentDisplay));
+
+  if (operator === "+") {
+    previousDisplay += currentDisplay;
+  } else if (operator === "-") {
+    previousDisplay -= currentDisplay;
+  } else if (operator === 'x') {
+    previousDisplay *= currentDisplay;
+  } else if (operator === '/') {
+    if (currentDisplay === 0) {
+      previousDisplay = "ERROR";
+      displayResults();
+      disableAllButtons();
+      return;
+    }
+    previousDisplay /= currentDisplay;
+  }
+  previousDisplay = roundNumber(previousDisplay);
+  console.log(currentDisplay, '- ', previousDisplay);
+  previousDisplay = previousDisplay.toString().replace(".", ",");
+  displayResults();
+  unhighlightOperators();
+}
+
+function swapToDot(num) {
+  return num.toString().replace(",", ".");
+}
+
+function roundNumber(num) {
+  return Math.round((num + Number.EPSILON) * 100000000) / 100000000;  //CoPilot is too smart for me
+}
+
+function displayResults() {
+  if (previousDisplay.length <= MAX_DIGITS_IN_DISPLAY + 2) {
+    display.textContent = previousDisplay;
+  }
+
+  operator = "";
+  currentDisplay = "";
+}
+
+function inputPlusMinus(number) {
+  let replaceComma;
+  if (display.textContent[display.textContent.length - 1] == ',') {
+    replaceComma = number.slice(0, display.textContent.length - 1) * -1;
+    replaceComma += ',';
+    previousDisplay = replaceComma;
+  } else if (display.textContent.includes(',')) {
+    replaceComma = number.replace(',', '.');
+    replaceComma = replaceComma * -1;
+    previousDisplay = replaceComma.toString().replace('.', ',');
+  } else if (display.textContent !== '0') {
+    (previousDisplay = (number * -1).toString())
+  }
+  displayResults();
+}
+
+function clearCalculator() {
+  currentDisplay = "";
+  previousDisplay = "";
+  operator = "";
+  display.textContent = "0";
+  unhighlightOperators();
+  reenableButtons();
+}
+
+function addDecimal() {
+  if (display.textContent === "0") {
+    currentDisplay = '0'.concat(",");
+  } else if (!display.textContent.includes(",")) {
+    currentDisplay = display.textContent.concat(",");
+    disableCommaBtn();
+  }
+  display.textContent = currentDisplay;
+}
+
+
+
+
 function highlightOperator(operatorBtn) {
-  unhighlightOperator();
+  unhighlightOperators(); // unhighlightOperators
   for (let i = 0; i < operators.length; i++) {
     if (operators[i].textContent === operatorBtn && operators[i].textContent !== '=') {
       operators[i].classList.add('operatorHighlighted');
@@ -234,7 +266,7 @@ function highlightOperator(operatorBtn) {
 
 }
 
-function unhighlightOperator() {
+function unhighlightOperators() {
   for (let i = 0; i < operators.length; i++) {
     operators[i].classList.remove('operatorHighlighted');
   }
@@ -282,7 +314,7 @@ function reenableButtons() {
   equal.disabled = false;
   equal.classList.remove('not-working-btn');
 
-  initialDisable();
+  disablePlusMinusAndZero();
 }
 
 function disableCommaBtn() {
@@ -324,15 +356,15 @@ function disableZero() {
   zero.classList.add('not-working-btn');
 }
 
-function initialDisable() {
-  if (currentDisplayNumber.textContent === '0') {
+function disablePlusMinusAndZero() {
+  if (display.textContent === '0') {
     disablePlusMinusBtn();
     disableZero();
   }
 }
-initialDisable();
 
-function removeInitialDisable() {
+
+function enablePlusMinusAndZero() {
   plusminusbutton.disabled = false;
   plusminusbutton.classList.remove('not-working-btn');
   zero.disabled = false;
