@@ -2,13 +2,15 @@
 // lets
 // code without functions (enter code)
 // functions
-/**
+
+/*
  * Consts and lets well defined and ordered
  * All events definied in functions
  * Functions rename done
  * const currentNumberDisplay to -> display
  * let currentNum & previousNum to -> let currentDisplay & previousDisplay
  */
+
 const MAX_DIGITS_IN_DISPLAY = 10;
 const display = document.querySelector(".currentNumber");
 const equal = document.querySelector(".equal");
@@ -28,7 +30,7 @@ let zero = document.getElementById('zero-btn');
 setMouseEvents();
 setKeyboardEvents();
 disablePlusMinusAndZero();
-//calculatorReset(); ?
+//calculatorReset(); ?  
 
 
 function setMouseEvents() {
@@ -56,12 +58,24 @@ function setEqualEvent() {
   equal.addEventListener("click", () => {
     if (previousDisplay !== "" && currentDisplay === "") {
       display.textContent = "ERROR";
-    } else
+
+    } else if (operator !== "") {
       calculate();
-    if (currentDisplay != "" && previousDisplay != "") {
+    } else {
+      clearDisplay()
+    }
+
+    if (currentDisplay !== "" && previousDisplay !== "") {
       calculate();
     }
   });
+}
+
+function clearDisplay() {
+  if (previousDisplay[previousDisplay.length-1] === ","){
+    previousDisplay = previousDisplay.slice(0, previousDisplay.length -1)
+    display.textContent = previousDisplay
+  }
 }
 
 function setCommaEvent() {
@@ -74,7 +88,7 @@ function setOperatorsEvent() {
       let input = event.target.textContent;
       console.log(input);
       if (input === plusminusbutton.textContent) {
-        inputPlusMinus(display.textContent);
+        inputPlusMinus();
       }
       else {
         arrayOperators.forEach(operator => {
@@ -114,7 +128,7 @@ function handleKeyPress(press) {
       handleOperator('/');
     }
     if (press.key === "Control") {
-      inputPlusMinus(display.textContent);
+      inputPlusMinus();
     }
     if (press.key === ",") {
       addDecimal();
@@ -124,6 +138,10 @@ function handleKeyPress(press) {
     }
   }
 
+}
+
+function setDisplayToZero() {
+  return display.textContent = "0"
 }
 
 function handleNumber(number) {
@@ -148,10 +166,10 @@ function handleOperator(op) {
   } else {
     calculate();
     operator = op;
-    // display.textContent = "0";  //setDisplay
-    //setButtonsEnabledStatus
+    setDisplayToZero();
+
   }
-  highlightOperator(operator);
+  highlightOperators(operator);
   disablePlusMinusBtn();  //disableButtonsBy???
 }
 
@@ -160,7 +178,7 @@ function handleDelete() {
     currentDisplay = currentDisplay.slice(0, -1);
     display.textContent = currentDisplay;
     if (currentDisplay === "") {
-      display.textContent = "0";
+      setDisplayToZero();
     }
   }
   if (currentDisplay === "" && previousDisplay !== "" && operator === "") {
@@ -194,7 +212,6 @@ function calculate() {
     previousDisplay /= currentDisplay;
   }
   previousDisplay = roundNumber(previousDisplay);
-  console.log(currentDisplay, '- ', previousDisplay);
   previousDisplay = previousDisplay.toString().replace(".", ",");
   displayResults();
   unhighlightOperators();
@@ -205,39 +222,34 @@ function swapToDot(num) {
 }
 
 function roundNumber(num) {
-  return Math.round((num + Number.EPSILON) * 100000000) / 100000000;  //CoPilot is too smart for me
+  return Math.round((num + Number.EPSILON) * 100000000) / 100000000;  //epsilon understood
 }
 
 function displayResults() {
   if (previousDisplay.length <= MAX_DIGITS_IN_DISPLAY + 2) {
     display.textContent = previousDisplay;
   }
-
   operator = "";
   currentDisplay = "";
 }
 
-function inputPlusMinus(number) {
-  let replaceComma;
-  if (display.textContent[display.textContent.length - 1] == ',') {
-    replaceComma = number.slice(0, display.textContent.length - 1) * -1;
-    replaceComma += ',';
-    previousDisplay = replaceComma;
-  } else if (display.textContent.includes(',')) {
-    replaceComma = number.replace(',', '.');
-    replaceComma = replaceComma * -1;
-    previousDisplay = replaceComma.toString().replace('.', ',');
-  } else if (display.textContent !== '0') {
-    (previousDisplay = (number * -1).toString())
+function inputPlusMinus() {
+  if (display.textContent[0] === '-') {
+    display.textContent = display.textContent.slice(1, display.textContent.length)
+  } else
+    display.textContent = "-" + display.textContent
+  if (operator === "") {
+    previousDisplay = display.textContent
+  } else if (operator !== "") {
+    currentDisplay = display.textContent
   }
-  displayResults();
 }
 
 function clearCalculator() {
   currentDisplay = "";
   previousDisplay = "";
   operator = "";
-  display.textContent = "0";
+  setDisplayToZero();
   unhighlightOperators();
   reenableButtons();
 }
@@ -252,18 +264,14 @@ function addDecimal() {
   display.textContent = currentDisplay;
 }
 
-
-
-
-function highlightOperator(operatorBtn) {
-  unhighlightOperators(); // unhighlightOperators
+function highlightOperators(operatorBtn) {
+  unhighlightOperators();
   for (let i = 0; i < operators.length; i++) {
     if (operators[i].textContent === operatorBtn && operators[i].textContent !== '=') {
       operators[i].classList.add('operatorHighlighted');
     }
   }
   reenableButtons();
-
 }
 
 function unhighlightOperators() {
