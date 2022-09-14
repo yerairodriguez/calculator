@@ -1,16 +1,3 @@
-// consts
-// lets
-// code without functions (enter code)
-// functions
-
-/*
- * Consts and lets well defined and ordered
- * All events definied in functions
- * Functions rename done
- * const currentNumberDisplay to -> display
- * let currentNum & previousNum to -> let currentDisplay & previousDisplay
- */
-
 const MAX_DIGITS_IN_DISPLAY = 10;
 const display = document.querySelector(".currentNumber");
 const equal = document.querySelector(".equal");
@@ -26,12 +13,9 @@ let arrayOperators = ["+", "-", "*", "/", "=", "x", "÷"];
 let plusminusbutton = document.getElementById('plusminus-btn');
 let zero = document.getElementById('zero-btn');
 
-
 setMouseEvents();
 setKeyboardEvents();
-disablePlusMinusAndZero();
-//calculatorReset(); ?  
-
+clearCalculator(); 
 
 function setMouseEvents() {
   setClearEvent();
@@ -55,27 +39,7 @@ function setClearEvent() {
 }
 
 function setEqualEvent() {
-  equal.addEventListener("click", () => {
-    if (previousDisplay !== "" && currentDisplay === "") {
-      display.textContent = "ERROR";
-
-    } else if (operator !== "") {
-      calculate();
-    } else {
-      clearDisplay()
-    }
-
-    if (currentDisplay !== "" && previousDisplay !== "") {
-      calculate();
-    }
-  });
-}
-
-function clearDisplay() {
-  if (previousDisplay[previousDisplay.length-1] === ","){
-    previousDisplay = previousDisplay.slice(0, previousDisplay.length -1)
-    display.textContent = previousDisplay
-  }
+  equal.addEventListener("click", getResult)
 }
 
 function setCommaEvent() {
@@ -100,7 +64,6 @@ function setOperatorsEvent() {
     });
   }
 }
-
 
 function setKeyboardEvents() {
   window.addEventListener("keydown", handleKeyPress);
@@ -140,8 +103,30 @@ function handleKeyPress(press) {
 
 }
 
-function setDisplayToZero() {
-  return display.textContent = "0"
+function setDisplay(value) {
+  display.textContent = value
+}
+
+function getResult() {
+  if (previousDisplay !== "" && currentDisplay === "") {
+    display.textContent = "ERROR";
+
+  } else if (operator !== "") {
+    calculate();
+  } else {
+    clearDisplay()
+  }
+
+  if (currentDisplay !== "" && previousDisplay !== "") {
+    calculate();
+  }
+}
+
+function clearDisplay() {
+  if (previousDisplay[previousDisplay.length-1] === ","){
+    previousDisplay = previousDisplay.slice(0, previousDisplay.length -1)
+    display.textContent = previousDisplay
+  }
 }
 
 function handleNumber(number) {
@@ -166,7 +151,7 @@ function handleOperator(op) {
   } else {
     calculate();
     operator = op;
-    setDisplayToZero();
+    setDisplay(0);
 
   }
   highlightOperators(operator);
@@ -178,7 +163,7 @@ function handleDelete() {
     currentDisplay = currentDisplay.slice(0, -1);
     display.textContent = currentDisplay;
     if (currentDisplay === "") {
-      setDisplayToZero();
+      setDisplay(0);
     }
   }
   if (currentDisplay === "" && previousDisplay !== "" && operator === "") {
@@ -249,7 +234,7 @@ function clearCalculator() {
   currentDisplay = "";
   previousDisplay = "";
   operator = "";
-  setDisplayToZero();
+  setDisplay(0);
   unhighlightOperators();
   reenableButtons();
 }
@@ -370,7 +355,6 @@ function disablePlusMinusAndZero() {
     disableZero();
   }
 }
-
 
 function enablePlusMinusAndZero() {
   plusminusbutton.disabled = false;
